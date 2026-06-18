@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Twin - Warehouse Map</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+        :root {
+            --empty-color: #2ecc71;
+            --full-color: #e74c3c;
+            --mid-color: #f1c40f;
+        }
+        body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+
+        .warehouse-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .location-cell {
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid rgba(0,0,0,0.05);
+        }
+
+        .location-cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            z-index: 10;
+            filter: brightness(1.1);
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        .pulse-alert {
+            animation: pulse-red 2s infinite;
+            border: 2px solid white !important;
+        }
+
+        .loc-code { font-size: 0.95rem; margin-bottom: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .loc-percent { font-size: 0.75rem; opacity: 0.9; font-weight: 400; }
+
+        .legend { display: flex; gap: 20px; margin-bottom: 25px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500; }
+        .dot { width: 14px; height: 14px; border-radius: 4px; }
+        .list-group-item { border-left: 4px solid #0d6efd; margin-bottom: 5px; border-radius: 5px !important; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-0"><i class="bi bi-map-fill text-primary me-2"></i>Digital Twin</h2>
+      <p class="text-muted mb-0">Vizualizarea în timp real a gradului de ocupare</p>
+    </div>
+    <a th:href="@{/}" class="btn btn-dark rounded-pill px-4 shadow-sm">
+      <i class="bi bi-arrow-left me-2"></i>Dashboard
+    </a>
+  </div>
+
+  <div class="legend p-3 bg-white rounded shadow-sm border-0">
+    <div class="legend-item"><span class="dot" style="background: #2ecc71;"></span> Liber (&lt; 30%)</div>
+    <div class="legend-item"><span class="dot" style="background: #f1c40f;"></span> Mediu (30-80%)</div>
+    <div class="legend-item"><span class="dot" style="background: #e74c3c;"></span> Aglomerat (&gt; 80%)</div>
+  </div>
+
+  <div class="warehouse-grid">
+    <div th:each="loc : ${locations}"
+         class="location-cell shadow-sm"
+         th:data-id="${loc.id}"
+         th:classappend="${loc.maxCapacity > 0 && (loc.currentOccupancy * 100.0) / loc.maxCapacity >= 90} ? 'pulse-alert'"
+         th:style="'background-color: ' + (${loc.maxCapacity > 0 && (loc.currentOccupancy * 100.0) / loc.maxCapacity < 30} ? '#2ecc71' :
+                       (${loc.maxCapacity > 0 && (loc.currentOccupancy * 100.0) / loc.maxCapacity < 80} ? '#f1c40f' : '#e74c3c'))">
+
+      <span class="loc-code" th:text="${loc.code}">A-01</span>
+
+      <span class="loc-percent"
+            th:with="perc=${loc.maxCapacity > 0 ? (loc.currentOccupancy * 100.0) / loc.maxCapacity : 0}"
+            th:text="${loc.currentOccupancy > 0 && perc < 1 ? 1 : #numbers.formatDecimal(perc, 1, 0)} + '%'">
+                0%
+            </span>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-dark text-white border-0">
+        <h5 class="modal-title fw-bold">Conținut: <span id="modalLocCode"></span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div id="modalLoading" class="text-center py-4 d-none">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+        <div id="productList" class="list-group list-group-flush"></div>
+        <div id="emptyMessage" class="text-center py-5 d-none">
+          <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+          <p class="mt-2 text-muted fw-bold">Raft gol</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const locModal = new bootstrap.Modal(document.getElementById('locationModal'));
+    document.querySelectorAll('.location-cell').forEach(cell => {
+        cell.addEventListener('click', function() {
+            const locId = this.getAttribute('data-id');
+            const locCode = this.querySelector('.loc-code').innerText;
+            document.getElementById('modalLocCode').innerText = locCode;
+            fetchDetails(locId);
+        });
+    });
+
+    function fetchDetails(id) {
+        const list = document.getElementById('productList');
+        const loading = document.getElementById('modalLoading');
+        const empty = document.getElementById('emptyMessage');
+        list.innerHTML = '';
+        loading.classList.remove('d-none');
+        empty.classList.add('d-none');
+        locModal.show();
+
+        fetch(`/locations/location-details/${id}`)
+            .then(res => res.json())
+            .then(products => {
+                loading.classList.add('d-none');
+                if (!products || products.length === 0) {
+                    empty.classList.remove('d-none');
+                } else {
+                    products.forEach(p => {
+                        const div = document.createElement('div');
+                        div.className = 'list-group-item d-flex justify-content-between align-items-center p-3 mb-2 shadow-sm';
+                        div.innerHTML = `<div><div class="fw-bold">${p.name}</div><small class="text-muted">${p.sku}</small></div>
+                                         <span class="badge bg-primary rounded-pill">${p.quantity} buc.</span>`;
+                        list.appendChild(div);
+                    });
+                }
+            }).catch(() => { loading.classList.add('d-none'); });
+    }
+</script>
+</body>
+</html>

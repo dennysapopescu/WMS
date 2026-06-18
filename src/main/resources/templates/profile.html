@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Profilul Meu - WMS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <style>
+        body { background-color: #f4f7f6; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .card { width: 450px; border-radius: 15px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .error-message { color: #dc3545; font-size: 0.8rem; display: none; margin-top: 5px; }
+    </style>
+</head>
+<body>
+<div class="card p-4">
+  <div class="text-center mb-4">
+    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 70px; height: 70px;">
+      <i class="bi bi-person-fill fs-1"></i>
+    </div>
+    <h4 class="fw-bold m-0" th:text="${user.fullName}">Nume Utilizator</h4>
+    <span class="badge bg-light text-dark border" th:text="${user.role}">Rol</span>
+  </div>
+
+  <div th:if="${success}" class="alert alert-success py-2 small" th:text="${success}"></div>
+  <div th:if="${error}" class="alert alert-danger py-2 small" th:text="${error}"></div>
+
+  <form th:action="@{/profile/change-password}" method="post" id="passwordForm">
+    <div class="mb-3">
+      <label class="form-label small fw-bold text-muted">Parola Actuală</label>
+      <input type="password" name="oldPassword" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold text-muted">Parola Nouă</label>
+      <input type="password" name="newPassword" id="newPassword" class="form-control" required minlength="4">
+    </div>
+    <div class="mb-4">
+      <label class="form-label small fw-bold text-muted">Confirmă Parola Nouă</label>
+      <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" required>
+      <div id="matchError" class="error-message fw-bold">⚠️ Parolele nu coincid!</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mb-2" id="submitBtn">ACTUALIZEAZĂ PAROLA</button>
+    <a th:href="@{/}" class="btn btn-outline-secondary w-100 btn-sm">Înapoi la Pagina Principală</a>
+  </form>
+</div>
+
+<script>
+    const form = document.getElementById('passwordForm');
+    const newPass = document.getElementById('newPassword');
+    const confirmPass = document.getElementById('confirmPassword');
+    const errorMsg = document.getElementById('matchError');
+
+    function validatePasswords() {
+        const val1 = newPass.value;
+        const val2 = confirmPass.value;
+
+        // Resetăm starea vizuală la fiecare tastare
+        confirmPass.classList.remove('is-invalid', 'is-valid');
+        errorMsg.style.display = 'none';
+
+        // 1. Dacă ambele sunt goale, nu afișăm nicio bifă/eroare
+        if (val1 === "" && val2 === "") {
+            return false;
+        }
+
+        // 2. Dacă sunt diferite (și cel puțin unul are text)
+        if (val1 !== val2) {
+            // Afișăm eroarea doar dacă utilizatorul a scris ceva în al doilea câmp
+            if (val2.length > 0) {
+                errorMsg.style.display = 'block';
+                confirmPass.classList.add('is-invalid');
+            }
+            return false;
+        }
+
+        // 3. Dacă sunt identice și NU sunt goale
+        if (val1 === val2 && val1 !== "") {
+            confirmPass.classList.add('is-valid');
+            return true;
+        }
+
+        return false;
+    }
+
+    confirmPass.addEventListener('input', validatePasswords);
+    newPass.addEventListener('input', validatePasswords);
+
+    form.addEventListener('submit', function(e) {
+        if (!validatePasswords()) {
+            e.preventDefault();
+            alert("Parolele noi trebuie să coincidă și să nu fie goale!");
+        }
+    });
+</script>
+<input type="hidden" id="successMsg" th:value="${success}">
+<input type="hidden" id="errorMsg" th:value="${error}">
+
+<script>
+    window.onload = function() {
+        const success = document.getElementById('successMsg').value;
+        const error = document.getElementById('errorMsg').value;
+
+        if (success) {
+            Toastify({
+                text: "✅ " + success,
+                duration: 4000,
+                gravity: "top",
+                position: "right",
+                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+            }).showToast();
+        }
+
+        if (error) {
+            Toastify({
+                text: "⚠️ " + error,
+                duration: 5000,
+                gravity: "top",
+                position: "right",
+                style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+            }).showToast();
+        }
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login - WMS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { width: 380px; border-radius: 15px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .btn-primary { background: #1e3c72; border: none; }
+        .btn-primary:hover { background: #162d56; }
+        .form-check-input:checked { background-color: #1e3c72; border-color: #1e3c72; }
+    </style>
+</head>
+<body>
+<div class="card p-4">
+  <div class="text-center mb-4">
+    <i class="bi bi-box-seam text-primary" style="font-size: 2.5rem;"></i>
+    <h3 class="fw-bold text-primary mt-2">WMS <span class="text-dark">LOGIN</span></h3>
+    <p class="text-muted small">Introduceți datele pentru a accesa depozitul</p>
+  </div>
+
+  <div th:if="${param.error}" class="alert alert-danger py-2 small border-0 shadow-sm">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>Utilizator sau parolă incorectă!
+  </div>
+
+  <div th:if="${param.logout}" class="alert alert-info py-2 small border-0 shadow-sm">
+    <i class="bi bi-info-circle-fill me-2"></i>Sesiune închisă cu succes.
+  </div>
+
+  <form th:action="@{/login}" method="post">
+    <div class="mb-3">
+      <label class="form-label small fw-bold text-muted">Utilizator</label>
+      <input type="text" name="username" class="form-control form-control-lg fs-6" placeholder="ex: ion.popescu" required autofocus>
+    </div>
+    <div class="mb-3">
+      <label class="form-label small fw-bold text-muted">Parolă</label>
+      <input type="password" name="password" class="form-control form-control-lg fs-6" placeholder="••••••••" required>
+    </div>
+
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+      <div class="form-check">
+        <input type="checkbox" name="remember-me" id="rememberMe" class="form-check-input">
+        <label class="form-check-label small text-muted" for="rememberMe">Ține-mă minte</label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">
+      <i class="bi bi-door-open me-2"></i>AUTENTIFICARE
+    </button>
+  </form>
+</div>
+</body>
+</html>
