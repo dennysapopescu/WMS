@@ -201,7 +201,6 @@ public class ViewController {
                 p.setQuantity(p.getQuantity() - 1);
                 productRepository.save(p);
 
-                // ADĂUGĂM ASTA: Eliberăm 1 loc pe hartă
                 if (p.getLocation() != null) {
                     updateLocationOccupancy(p.getLocation(), -1);
                 }
@@ -215,7 +214,7 @@ public class ViewController {
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productRepository.findById(id).ifPresent(p -> {
-            // ADĂUGĂM ASTA: Eliberăm tot spațiul ocupat de acest produs pe hartă
+
             if (p.getLocation() != null) {
                 updateLocationOccupancy(p.getLocation(), -p.getQuantity());
             }
