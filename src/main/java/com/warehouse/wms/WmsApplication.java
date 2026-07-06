@@ -21,6 +21,7 @@ public class WmsApplication {
 
 			// userRepository.deleteAll();
 
+			// --- ADMIN ---
 			if (userRepository.findByUsername("admin").isEmpty()) {
 				User admin = new User();
 				admin.setUsername("admin");
@@ -30,6 +31,26 @@ public class WmsApplication {
 				admin.setFullName("Administrator");
 				userRepository.save(admin);
 				System.out.println("Utilizator admin creat cu succes!");
+			}
+
+			// --- OPERATOR ---
+			if (userRepository.findByUsername("operator").isEmpty()) {
+				User op = new User();
+				op.setUsername("operator");
+				op.setPassword(passwordEncoder.encode("operator123"));
+				op.setRole("ROLE_OPERATOR");
+				op.setFullName("Warehouse Operator");
+				userRepository.save(op);
+			}
+
+			// --- VIEWER ---
+			if (userRepository.findByUsername("viewer").isEmpty()) {
+				User view = new User();
+				view.setUsername("viewer");
+				view.setPassword(passwordEncoder.encode("viewer123"));
+				view.setRole("ROLE_VIEWER");
+				view.setFullName("Guest Viewer");
+				userRepository.save(view);
 			}
 		};
 	}
