@@ -114,4 +114,11 @@ Viewer: username viewer, password viewer123
 
 **Dennysa-Maria Popescu**
 
-[LinkedIn](https://www.linkedin.com/in/dennysa-popescu-4938a9263) · [GitHub](https://github.com/dennysapopescu) · [Portfolio](https://github.com/dennysapopescu)
+<p align="left">
+  <a href="https://www.linkedin.com/in/dennysa-popescu-4938a9263">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile" />
+  </a>
+  <a href="https://github.com/dennysapopescu">
+    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Profile" />
+  </a>
+</p>
