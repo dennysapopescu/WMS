@@ -3,7 +3,6 @@
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 A full-stack warehouse management system that digitizes core logistics operations — inventory tracking, inbound/outbound flows, and storage optimization — replacing manual, error-prone processes with a real-time, role-based web application.
 
