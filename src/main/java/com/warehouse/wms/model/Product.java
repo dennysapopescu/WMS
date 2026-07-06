@@ -24,4 +24,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
+
+    // Optimistic locking: previne suprascrierea stocului când doi operatori
+    // actualizează același produs simultan (ex: 2 picking-uri validate în paralel)
+    @Version
+    private Long version;
 }

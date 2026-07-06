@@ -2,7 +2,9 @@ package com.warehouse.wms.controller;
 
 import com.warehouse.wms.model.*;
 import com.warehouse.wms.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -83,8 +85,12 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    // @Transactional: toate operațiile de mai jos (verificare stoc, scădere cantitate,
+    // actualizare locație, marcare comandă COMPLETED, log) devin atomice — dacă oricare
+    // pas eșuează, se face rollback complet.
     @PostMapping("/scan-confirm")
     @ResponseBody
+    @Transactional
     public ResponseEntity<String> scanAndConfirm(@RequestParam Long orderId, @RequestParam String scannedCode) {
         Optional<OutboundOrder> orderOpt = orderRepository.findById(orderId);
         if (orderOpt.isEmpty()) return ResponseEntity.status(404).body("Comanda nu există.");
@@ -100,7 +106,15 @@ public class OrderController {
                         p.getLocation().getId().equals(order.getSuggestedLocation().getId()))
                 .findFirst().orElse(null);
 
-        if (product != null && product.getQuantity() >= order.getRequestedQuantity()) {
+        if (product == null || product.getQuantity() < order.getRequestedQuantity()) {
+            return ResponseEntity.status(500).body("Eroare stoc.");
+        }
+
+        try {
+            // product.getVersion() e verificat automat de JPA la save(): dacă alt operator
+            // a modificat acest produs între citire și scriere, Hibernate detectează
+            // mismatch-ul de versiune și aruncă OptimisticLockingFailureException în loc
+            // să suprascrie silențios o cantitate deja modificată de altcineva.
             product.setQuantity(product.getQuantity() - order.getRequestedQuantity());
             productRepository.save(product);
 
@@ -113,8 +127,11 @@ public class OrderController {
 
             saveLog(product.getName(), product.getSku(), "PICKING FINALIZAT", order.getRequestedQuantity());
             return ResponseEntity.ok("Succes");
+        } catch (OptimisticLockingFailureException ex) {
+            // Alt operator a modificat acest produs chiar înainte de commit-ul nostru.
+            // Respingem cererea în loc să corupem stocul; clientul poate rescana/reîncerca.
+            return ResponseEntity.status(409).body("Conflict: stocul a fost modificat de alt operator între timp. Reîncearcă.");
         }
-        return ResponseEntity.status(500).body("Eroare stoc.");
     }
 
     @PostMapping("/delete/{id}")
