@@ -11,12 +11,18 @@ A full-stack warehouse management system that digitizes core logistics operation
 ## 🎥 Demo
 
 
-<img width="995" height="415" alt="Screenshot 2026-07-06 at 15 02 30" src="https://github.com/user-attachments/assets/0246383d-2f81-4cfd-a347-08f2c2535444" />
-<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 42" src="https://github.com/user-attachments/assets/22418b17-0c25-4317-ba6a-b50cd658e2cc" />
-<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 47" src="https://github.com/user-attachments/assets/8acbca33-6b84-465a-b124-a21183b21d8a" />
-<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 03 51" src="https://github.com/user-attachments/assets/80db957d-8ac8-4735-9c22-f06530accb6f" />
-<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 04 00" src="https://github.com/user-attachments/assets/5e49729b-df4e-4916-ba65-56a5d1adb735" />
-<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 04 11" src="https://github.com/user-attachments/assets/bc790d66-db8b-43fa-8650-346463756a71" />
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/0246383d-2f81-4cfd-a347-08f2c2535444" width="300" /></td>
+    <td><img src="https://github.com/user-attachments/assets/22418b17-0c25-4317-ba6a-b50cd658e2cc" width="300" /></td>
+    <td><img src="https://github.com/user-attachments/assets/8acbca33-6b84-465a-b124-a21183b21d8a" width="300" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/80db957d-8ac8-4735-9c22-f06530accb6f" width="300" /></td>
+    <td><img src="https://github.com/user-attachments/assets/5e49729b-df4e-4916-ba65-56a5d1adb735" width="300" /></td>
+    <td><img src="https://github.com/user-attachments/assets/bc790d66-db8b-43fa-8650-346463756a71" width="300" /></td>
+  </tr>
+</table>
 
 
 🔗 **[Live demo](#)** *(i will add once deployed — e.g. Render + Railway MySQL)*
