@@ -89,6 +89,12 @@ Admin: username admin, password admin123
 Operator: username operator, password operator123
 Viewer: username viewer, password viewer123
 
+| Role | Username | Password |
+|---|---|---|
+| Admin | admin | admin123 |
+| Operator | operator | operator123 |
+| Viewer | viewer | viewer123 |
+
 ## User Roles
 
 | Role | Access |
