@@ -84,7 +84,10 @@ git clone https://github.com/dennysapopescu/PopescuDennysa_WMS.git
 3. Run the `@SpringBootApplication` main class
 4. Visit `http://localhost:8080`
 
-**Test accounts** *(add seed data / demo login credentials here so reviewers don't need to register)*
+**Test accounts** 
+Admin: username admin, password admin123
+Operator: username operator, password operator123
+Viewer: username viewer, password viewer123
 
 ## User Roles
 
