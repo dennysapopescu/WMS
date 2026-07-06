@@ -113,4 +113,5 @@ Viewer: username viewer, password viewer123
 ## Author
 
 **Dennysa-Maria Popescu**
-[LinkedIn](#) · [GitHub](#) · [Portfolio](#)
+
+[LinkedIn](www.linkedin.com/in/dennysa-popescu-4938a9263) · [GitHub](https://github.com/dennysapopescu) · [Portfolio](https://github.com/dennysapopescu)
