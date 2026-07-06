@@ -11,7 +11,7 @@ A full-stack warehouse management system that digitizes core logistics operation
 ## 🎥 Demo
 
 
-<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 30" src="https://github.com/user-attachments/assets/0246383d-2f81-4cfd-a347-08f2c2535444" />
+<img width="995" height="415" alt="Screenshot 2026-07-06 at 15 02 30" src="https://github.com/user-attachments/assets/0246383d-2f81-4cfd-a347-08f2c2535444" />
 <img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 42" src="https://github.com/user-attachments/assets/22418b17-0c25-4317-ba6a-b50cd658e2cc" />
 <img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 47" src="https://github.com/user-attachments/assets/8acbca33-6b84-465a-b124-a21183b21d8a" />
 <img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 03 51" src="https://github.com/user-attachments/assets/80db957d-8ac8-4735-9c22-f06530accb6f" />
