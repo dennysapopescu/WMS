@@ -1,113 +1,102 @@
-# Warehouse Management System (WMS)
+# 📦 Warehouse Management System (WMS)
 
-## Overview
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
+![MySQL](https://img.shields.io/badge/MySQL-8-blue)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-This project is a **Warehouse Management System (WMS)** designed to streamline and optimize warehouse operations. It provides a modern web-based solution for managing inventory, tracking product movement, and improving overall logistics efficiency.
+A full-stack warehouse management system that digitizes core logistics operations — inventory tracking, inbound/outbound flows, and storage optimization — replacing manual, error-prone processes with a real-time, role-based web application.
 
-The application focuses on reducing manual processes, minimizing human errors, and offering real-time visibility over stock and warehouse activities.
+> Built as a solo project to explore how enterprise logistics software actually works under the hood: concurrency-safe stock updates, role-based security, and a slotting algorithm that mimics real warehouse decision-making.
 
----
+## 🎥 Demo
+
+
+<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 30" src="https://github.com/user-attachments/assets/0246383d-2f81-4cfd-a347-08f2c2535444" />
+<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 42" src="https://github.com/user-attachments/assets/22418b17-0c25-4317-ba6a-b50cd658e2cc" />
+<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 02 47" src="https://github.com/user-attachments/assets/8acbca33-6b84-465a-b124-a21183b21d8a" />
+<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 03 51" src="https://github.com/user-attachments/assets/80db957d-8ac8-4735-9c22-f06530accb6f" />
+<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 04 00" src="https://github.com/user-attachments/assets/5e49729b-df4e-4916-ba65-56a5d1adb735" />
+<img width="1395" height="815" alt="Screenshot 2026-07-06 at 15 04 11" src="https://github.com/user-attachments/assets/bc790d66-db8b-43fa-8650-346463756a71" />
+
+
+🔗 **[Live demo](#)** *(i will add once deployed — e.g. Render + Railway MySQL)*
+
+## Why this project
+
+Most portfolio CRUD apps manage a single entity with basic forms. This one models a real operational problem: multiple concurrent users (Admin/Operator/Viewer), stock that must stay consistent under concurrent updates, and a placement algorithm that has to reason about warehouse capacity — not just "insert row into table."
 
 ## Key Features
 
-* **Inventory Management** – Manage products and stock levels efficiently
-* **Inbound & Outbound Operations** – Track goods entering and leaving the warehouse
-* **Authentication & Role-Based Access Control** – Secure system with different user roles (Admin, Operator, Viewer)
-* **Smart Slotting Algorithm** – Suggests optimal storage locations based on warehouse capacity
-* **QR Code Integration** – Generate and scan QR codes for product identification
-* **Audit & Traceability** – Track all stock movements with timestamps and user actions
-* **PDF Reporting** – Export inventory reports using PDF format
-* **CSV Import/Export** – Easy data transfer between systems
-* **Warehouse Visualization (Digital Twin)** – Interactive warehouse map for real-time monitoring
-
----
-
-## Tech Stack
-
-* **Backend:** Java, Spring Boot
-* **Security:** Spring Security
-* **Database:** MySQL, Spring Data JPA
-* **Frontend:** Thymeleaf, HTML, CSS, JavaScript
-* **Libraries:**
-
-  * ZXing (QR Code generation)
-  * iText (PDF export)
-  * OpenCSV (CSV processing)
-
----
+| Feature | What it does |
+|---|---|
+| **Inventory Management** | Full product & stock-level tracking |
+| **Inbound / Outbound Operations** | Registers goods movement in and out of the warehouse |
+| **Role-Based Access Control** | Spring Security — Admin / Operator / Viewer, each with scoped permissions |
+| **Smart Slotting Algorithm** | Suggests optimal storage locations based on available capacity |
+| **QR Code Integration** | Generates & scans QR codes (ZXing) for product identification |
+| **Audit & Traceability** | Every stock movement logged with timestamp + acting user |
+| **PDF Reporting** | Exportable inventory reports (iText) |
+| **CSV Import/Export** | Bulk data transfer (OpenCSV) |
+| **Digital Twin Visualization** | Interactive warehouse map reflecting real-time stock state |
 
 ## Architecture
 
-The application follows a **client-server architecture** using the **MVC (Model-View-Controller)** pattern:
+```
+  Inbound Goods → [Smart Slotting Engine] → Storage Location
+                                                    ↓
+  Viewer/Operator/Admin ← [Spring Security RBAC] ← Digital Twin Map
+                                                    ↓
+                        Outbound Goods ← Stock Update (Audit Logged)
+```
 
-* **Model:** Handles data and business logic
-* **View:** Built with Thymeleaf templates
-* **Controller:** Manages user requests and application flow
+**Pattern:** MVC (Model–View–Controller)
+- **Model** — JPA entities + business logic (stock rules, slotting, audit)
+- **View** — Thymeleaf templates (server-rendered)
+- **Controller** — Request handling & flow orchestration
 
----
+## Tech Stack
+
+- **Backend:** Java 17, Spring Boot, Spring Data JPA
+- **Security:** Spring Security (role-based)
+- **Database:** MySQL
+- **Frontend:** Thymeleaf, HTML, CSS, JavaScript
+- **Libraries:** ZXing (QR codes), iText (PDF export), OpenCSV (CSV I/O)
 
 ## Getting Started
-
-### 1. Clone the repository
 
 ```bash
 git clone https://github.com/dennysapopescu/PopescuDennysa_WMS.git
 ```
 
-### 2. Open in IntelliJ IDEA
+1. Open in IntelliJ IDEA as a Maven project
+2. Create a MySQL database and update `application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   ```
+3. Run the `@SpringBootApplication` main class
+4. Visit `http://localhost:8080`
 
-* Import as a Maven/Gradle project
-
-### 3. Configure the database
-
-* Create a MySQL database
-* Update `application.properties` with your credentials:
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/your_database
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-```
-
-### 4. Run the application
-
-* Run the main class (`@SpringBootApplication`)
-* Access the app at: `http://localhost:8080`
-
----
+**Test accounts** *(add seed data / demo login credentials here so reviewers don't need to register)*
 
 ## User Roles
 
-* **Admin** – Full access to all features
-* **Operator** – Handles warehouse operations
-* **Viewer** – Read-only access
+| Role | Access |
+|---|---|
+| Admin | Full access to all features |
+| Operator | Warehouse operations (inbound/outbound, slotting) |
+| Viewer | Read-only |
 
----
+## Roadmap
 
-## Use Cases
-
-* Warehouse inventory tracking
-* Logistics process optimization
-* Stock monitoring and reporting
-* Digital transformation of warehouse operations
-
----
-
-## Future Improvements
-
-* Mobile app integration
-* Advanced analytics & dashboards
-* Barcode scanner device integration
-* Microservices architecture
-
----
+- [ ] Mobile companion app
+- [ ] Advanced analytics dashboard
+- [ ] Physical barcode scanner integration
+- [ ] Split into microservices (inventory / auth / reporting)
 
 ## Author
 
 **Dennysa-Maria Popescu**
-
----
-
-## Notes
-
-This project demonstrates practical implementation of modern backend technologies and real-world logistics concepts, making it suitable for both learning purposes and real-world adaptation.
+[LinkedIn](#) · [GitHub](#) · [Portfolio](#)
