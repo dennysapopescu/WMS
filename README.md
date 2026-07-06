@@ -84,24 +84,17 @@ git clone https://github.com/dennysapopescu/PopescuDennysa_WMS.git
 3. Run the `@SpringBootApplication` main class
 4. Visit `http://localhost:8080`
 
-**Test accounts** 
-Admin: username admin, password admin123
-Operator: username operator, password operator123
-Viewer: username viewer, password viewer123
+## Access & Roles
 
-| Role | Username | Password |
-|---|---|---|
-| Admin | admin | admin123 |
-| Operator | operator | operator123 |
-| Viewer | viewer | viewer123 |
+To explore the application features, you can log in with the following demo accounts:
 
-## User Roles
+| Role | Username | Password | Access Level |
+|---|---|---|---|
+| **Admin** | `admin` | `admin123` | Full access |
+| **Operator** | `operator` | `operator123` | Inbound/Outbound/Slotting |
+| **Viewer** | `viewer` | `viewer123` | Read-only |
 
-| Role | Access |
-|---|---|
-| Admin | Full access to all features |
-| Operator | Warehouse operations (inbound/outbound, slotting) |
-| Viewer | Read-only |
+> Note: These accounts are automatically seeded in the database upon startup.
 
 ## Roadmap
 
