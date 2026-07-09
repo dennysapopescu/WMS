@@ -25,7 +25,6 @@ A full-stack warehouse management system that digitizes core logistics operation
 </table>
 
 
-🔗 **[Live demo](#)** *(i will add once deployed — e.g. Render + Railway MySQL)*
 
 ## Why this project
 
