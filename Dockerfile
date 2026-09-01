@@ -32,7 +32,7 @@ COPY --from=frontend-builder /app/src/main/resources/static/ src/main/resources/
 RUN ./mvnw clean package -DskipTests -B
 
 # --- Stage 3: Production Runtime ---
-FROM eclipse-temurin:17-jre-alpine AS runtime
+FROM eclipse-temurin:17-jre AS runtime
 
 LABEL maintainer="Dennysa-Maria Popescu"
 LABEL description="Warehouse Management System (WMS) Production Image"
@@ -40,10 +40,10 @@ LABEL description="Warehouse Management System (WMS) Production Image"
 WORKDIR /app
 
 # Security: Create non-root user
-RUN addgroup -S wmsgroup && adduser -S wmsuser -G wmsgroup
+RUN groupadd --system wmsgroup && useradd --system --gid wmsgroup wmsuser
 
 # Install curl for container health check
-RUN apk add --no-cache curl
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 # Copy fat JAR from Stage 2
 COPY --from=backend-builder /app/target/wms-0.0.1-SNAPSHOT.jar app.jar
