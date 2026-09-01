@@ -68,7 +68,7 @@ A full-stack Warehouse Management System built with Java, Spring Boot, React, an
 
 ## Why This Project
 
-This project goes beyond basic CRUD by modeling real-world warehouse operations and the engineering challenges involved in inventory management:
+This project goes beyond basic CRUD by modeling real-world warehouse operations and the engineering challenges involved in inventory management.
 
 ## Key Features
 
