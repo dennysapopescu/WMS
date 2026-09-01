@@ -2,6 +2,7 @@ package com.warehouse.wms.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
@@ -15,18 +16,20 @@ public class Product {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String sku; // Codul unic (ex: LAPTOP-001)
+    private String sku; // Unique SKU identifier (e.g., LAPTOP-001)
 
     private String name;
     private Integer quantity;
-    private Double price;    // per unitate
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal price;    // Unit price; exact monetary representation
 
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
 
-    // Optimistic locking: previne suprascrierea stocului când doi operatori
-    // actualizează același produs simultan (ex: 2 picking-uri validate în paralel)
+    // Optimistic locking: prevents stock overwrites when multiple operators
+    // update the same product concurrently (e.g., parallel pick confirmations)
     @Version
     private Long version;
+
 }

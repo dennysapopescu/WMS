@@ -33,6 +33,6 @@ public class OutboundOrder {
     @JoinColumn(name = "location_id")
     private Location suggestedLocation;
 
-    private String assignedTo; // Numele operatorului care a validat
+    private String assignedTo; // Username of the confirming operator
     private LocalDateTime assignedAt;
 }

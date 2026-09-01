@@ -10,11 +10,11 @@ class QrCodeServiceTest {
 
     @Test
     void generateQRCode_returnsNonEmptyPngBytesForValidInput() {
-        byte[] result = qrCodeService.generateQRCode("Produs SKU: TEST-001");
+        byte[] result = qrCodeService.generateQRCode("Product SKU: TEST-001");
 
         assertNotNull(result);
         assertTrue(result.length > 0);
-        // Semnătura PNG standard: 0x89 'P' 'N' 'G'
+        // Standard PNG signature header: 0x89 'P' 'N' 'G'
         assertEquals((byte) 0x89, result[0]);
         assertEquals('P', result[1]);
         assertEquals('N', result[2]);
@@ -31,13 +31,11 @@ class QrCodeServiceTest {
 
     @Test
     void generateQRCode_handlesEmptyStringGracefully() {
-        // Nu ar trebui să arunce excepție necontrolată — serviciul prinde excepțiile
-        // intern și întoarce null în caz de eroare.
+        // Should not throw unhandled exception — gracefully caught internally
         byte[] result = qrCodeService.generateQRCode("");
 
-        // ZXing poate genera cu succes un QR și pentru string gol, sau serviciul
-        // întoarce null dacă apare vreo eroare internă — ambele sunt comportamente
-        // acceptabile, important e că nu crapă aplicația.
+        // ZXing can generate a valid matrix for an empty string or return null on internal error
         assertDoesNotThrow(() -> qrCodeService.generateQRCode(""));
     }
+
 }

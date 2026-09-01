@@ -16,5 +16,5 @@ public class InventoryLog {
     private String action;
     private Integer quantityChanged;
     private LocalDateTime timestamp;
-    private String performedBy; // Numele utilizatorului logat
+    private String performedBy; // Username of the authenticated actor
 }

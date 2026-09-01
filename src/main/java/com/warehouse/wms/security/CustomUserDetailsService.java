@@ -2,27 +2,60 @@ package com.warehouse.wms.security;
 
 import com.warehouse.wms.model.User;
 import com.warehouse.wms.repository.UserRepository;
-import org.springframework.security.core.userdetails.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+@RequiredArgsConstructor
+public class CustomUserDetailsService
+        implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User nu a fost găsit"));
+    public UserDetails loadUserByUsername(
+            String username
+    ) throws UsernameNotFoundException {
+
+        User user =
+                userRepository
+                        .findByUsername(
+                                username.trim()
+                        )
+                        .orElseThrow(() ->
+                                new UsernameNotFoundException(
+                                        "User not found"
+                                )
+                        );
+
+
+        String role =
+                user.getRole() == null
+                        ? "VIEWER"
+                        : user.getRole().trim();
+
+        /*
+         * User.builder().roles(...)
+         * automatically adds ROLE_.
+         *
+         * Therefore:
+         * ROLE_ADMIN -> ADMIN
+         */
+        if (role.startsWith("ROLE_")) {
+            role = role.substring(
+                    "ROLE_".length()
+            );
+        }
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
+                .builder()
+                .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole().replace("ROLE_", ""))
+                .roles(role)
+                .disabled(!user.isActive())
                 .build();
     }
 }

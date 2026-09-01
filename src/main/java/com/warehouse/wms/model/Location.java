@@ -12,11 +12,15 @@ public class Location {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String code; // Ex: R-01-A (Raft 1, Poziția A)
+    private String code; // e.g. R-01-A (Rack 1, Position A)
 
     private String description;
 
     private Integer maxCapacity;
 
-    private Integer currentOccupancy = 0; // Câte unități sunt acum
+    private Integer currentOccupancy = 0; // Current units stored
+
+
+    @Version
+    private Long version;
 }

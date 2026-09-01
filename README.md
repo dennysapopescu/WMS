@@ -1,111 +1,248 @@
 # 📦 Warehouse Management System (WMS)
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-brightgreen)
+![React](https://img.shields.io/badge/React-18-blue)
+![Vite](https://img.shields.io/badge/Vite-6-purple)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ed)
 
-A full-stack warehouse management system that digitizes core logistics operations — inventory tracking, inbound/outbound flows, and storage optimization — replacing manual, error-prone processes with a real-time, role-based web application.
+A full-stack Warehouse Management System built with Java, Spring Boot, React, and MySQL. It digitizes core logistics operations — live inventory tracking, inbound/outbound flows, and storage optimization — featuring concurrency-safe stock updates, role-based access control, and an interactive digital twin warehouse map reflecting current inventory state.
 
-> Built as a solo project to explore how enterprise logistics software actually works under the hood: concurrency-safe stock updates, role-based security, and a slotting algorithm that mimics real warehouse decision-making.
-
-## 🎥 Demo
-
+## 📸 Application Preview
 
 <table>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/0246383d-2f81-4cfd-a347-08f2c2535444" width="300" /></td>
-    <td><img src="https://github.com/user-attachments/assets/22418b17-0c25-4317-ba6a-b50cd658e2cc" width="300" /></td>
-    <td><img src="https://github.com/user-attachments/assets/8acbca33-6b84-465a-b124-a21183b21d8a" width="300" /></td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/login.png" alt="Login Screen" />
+      <br />
+      <sub><b>1. Authentication & Role Sign-in</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/dashboard.png" alt="Dashboard Overview" />
+      <br />
+      <sub><b>2. Dashboard & Inbound/Outbound</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/dashboard_table.png" alt="Product Catalog Table" />
+      <br />
+      <sub><b>3. Inventory Stock Catalog</b></sub>
+    </td>
   </tr>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/80db957d-8ac8-4735-9c22-f06530accb6f" width="300" /></td>
-    <td><img src="https://github.com/user-attachments/assets/5e49729b-df4e-4916-ba65-56a5d1adb735" width="300" /></td>
-    <td><img src="https://github.com/user-attachments/assets/bc790d66-db8b-43fa-8650-346463756a71" width="300" /></td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/dashboard_data.png" alt="Dashboard Analytics & Insights" />
+      <br />
+      <sub><b>4. Distribution & Consumption Insights</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/locations.png" alt="Location Sectors" />
+      <br />
+      <sub><b>5. Storage Racks & Capacity</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/heatmap.png" alt="Warehouse Heatmap Map" />
+      <br />
+      <sub><b>6. Digital Twin 2D Heatmap</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/picking_list.png" alt="Picking List & QR Scan" />
+      <br />
+      <sub><b>7. Picking Queue & QR Verification</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/users.png" alt="User Management" />
+      <br />
+      <sub><b>8. User Management & RBAC</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/changepass.png" alt="Profile & Password Update" />
+      <br />
+      <sub><b>9. User Profile & Password Update</b></sub>
+    </td>
   </tr>
 </table>
 
+## Why This Project
 
-
-## Why this project
-
-Most portfolio CRUD apps manage a single entity with basic forms. This one models a real operational problem: multiple concurrent users (Admin/Operator/Viewer), stock that must stay consistent under concurrent updates, and a placement algorithm that has to reason about warehouse capacity — not just "insert row into table."
+Unlike typical CRUD apps that manage isolated entities with standard forms, this system models real-world operational logistics challenges:
+- **Concurrency Control:** Optimistic locking (`@Version`) protects inventory updates from conflicting concurrent modifications and lost updates when multiple operators confirm picking tasks or adjust stock simultaneously.
+- **Smart Slotting Engine:** Placement heuristics evaluate rack capacity and recommend suitable storage locations based on current occupancy.
+- **Authentication & RBAC:** Spring Security authentication (session and remember-me token) with role-based access control (Admin / Operator / Viewer) and audit traceability.
+- **Digital Twin Visualization:** Interactive 2D warehouse map reflecting current inventory and storage occupancy.
 
 ## Key Features
 
-| Feature | What it does |
+| Feature | Description |
 |---|---|
-| **Inventory Management** | Full product & stock-level tracking |
-| **Inbound / Outbound Operations** | Registers goods movement in and out of the warehouse |
-| **Role-Based Access Control** | Spring Security — Admin / Operator / Viewer, each with scoped permissions |
-| **Smart Slotting Algorithm** | Suggests optimal storage locations based on available capacity |
-| **QR Code Integration** | Generates & scans QR codes (ZXing) for product identification |
-| **Audit & Traceability** | Every stock movement logged with timestamp + acting user |
-| **PDF Reporting** | Exportable inventory reports (iText) |
-| **CSV Import/Export** | Bulk data transfer (OpenCSV) |
-| **Digital Twin Visualization** | Interactive warehouse map reflecting real-time stock state |
+| **Inventory Management** | Product catalog with SKU search, pagination, low stock threshold alerts, and stock adjustments |
+| **Inbound & Outbound Flows** | Goods receipt registration and outbound picking order fulfillment workflows |
+| **Role-Based Access Control** | Spring Security authorization with scoped Admin, Operator, and Viewer permissions |
+| **Smart Slotting Algorithm** | Heuristic engine evaluating rack capacities to suggest suitable storage locations |
+| **QR Code Integration** | Dynamic QR generation (ZXing) and camera scanning (HTML5-QRCode) for pick verification |
+| **Audit & Traceability** | Log history capturing stock adjustments with operator identity and timestamp |
+| **Reporting & Data Export** | PDF inventory report generation (iText 7) and CSV bulk import/export (OpenCSV) |
+| **Digital Twin Visualization** | Interactive 2D spatial heatmap of warehouse sectors and occupancy |
+| **Consumption Insights** | Restocking timeframes estimated from 7-day consumption burn rate and off-hours activity audit |
 
 ## Architecture
 
 ```
-  Inbound Goods → [Smart Slotting Engine] → Storage Location
-                                                    ↓
-  Viewer/Operator/Admin ← [Spring Security RBAC] ← Digital Twin Map
-                                                    ↓
-                        Outbound Goods ← Stock Update (Audit Logged)
+                   ┌───────────────────┐
+                   │    React SPA      │
+                   │ Vite + Tailwind   │
+                   └─────────┬─────────┘
+                             │ HTTP/JSON
+                             ▼
+                   ┌───────────────────┐
+                   │ Spring Boot API   │
+                   │   REST + Security │
+                   └─────────┬─────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              ▼              ▼              ▼
+         Services         Flyway          Actuator
+              │
+              ▼
+         Spring Data JPA
+              │
+              ▼
+          MySQL 8
 ```
 
-**Pattern:** MVC (Model–View–Controller)
-- **Model** — JPA entities + business logic (stock rules, slotting, audit)
-- **View** — Thymeleaf templates (server-rendered)
-- **Controller** — Request handling & flow orchestration
+### Continuous Integration
+
+```
+GitHub Repository ──> GitHub Actions (CI) ──> Tests ──> Multi-Stage Docker Build
+```
+
+### Design Principles
+
+- **Separation of Concerns:** JPA Entities remain persistence-focused; immutable Java record DTOs define the API contract.
+- **Transactional Integrity:** Service layer manages business rules, capacity constraints, and inventory logs within `@Transactional` boundaries.
+- **Structured Error Handling:** Global `@RestControllerAdvice` translates validation errors and domain conflicts into predictable JSON error responses.
+
+## REST API Overview
+
+All business API endpoints are versioned under `/api/v1` (with authentication routes under `/api/auth`):
+
+| Resource | Methods | Description |
+|---|---|---|
+| `/api/auth` | `POST /login`, `POST /logout`, `GET /me` | Authentication session & user state |
+| `/api/v1/locations` | `GET`, `POST`, `PUT`, `DELETE`, `GET /suggestions` | Storage sector management and smart slotting recommendations |
+| `/api/v1/products` | `GET`, `POST`, `PUT`, `DELETE`, `PATCH /stock`, `POST /transfer`, `POST /import` | Product inventory, stock adjustments, CSV bulk import, and PDF export |
+| `/api/v1/outbound-orders` | `GET`, `POST`, `POST /confirm-pick`, `POST /scan-confirm`, `DELETE` | Order picking workflow and QR scan confirmation |
+| `/api/v1/dashboard` | `GET` | Aggregated KPI metrics, estimated restocking timeframes, and audit logs |
+| `/api/v1/admin/users` | `GET`, `POST`, `PATCH /{id}/toggle` | Staff user account management (Admin only) |
+| `/api/v1/profile` | `POST /change-password` | Self-service credential update |
+
+Interactive OpenAPI documentation is accessible at `/swagger-ui/index.html` (machine-readable specification at `/v3/api-docs`).
 
 ## Tech Stack
 
-- **Backend:** Java 17, Spring Boot, Spring Data JPA
-- **Security:** Spring Security (role-based)
-- **Database:** MySQL
-- **Frontend:** Thymeleaf, HTML, CSS, JavaScript
-- **Libraries:** ZXing (QR codes), iText (PDF export), OpenCSV (CSV I/O)
+- **Backend:** Java 17, Spring Boot 3.4, Spring Data JPA, Spring Security, Hibernate, Flyway
+- **Frontend (SPA):** React 18, Vite, Tailwind CSS, Lucide Icons, Chart.js, HTML5-QRCode Scanner
+- **Database:** MySQL 8 (Production & Dev) / H2 & Testcontainers (Integration Testing)
+- **Libraries:** ZXing (QR code processing), iText 7 (PDF document export), OpenCSV (CSV parsing), Springdoc OpenAPI 2.8 (Swagger UI)
+- **DevOps & Tooling:** Docker, Docker Compose, Multi-stage Dockerfile, GitHub Actions CI
+
+## Profiles & Configuration
+
+| Profile | Purpose | Description |
+|---|---|---|
+| **`dev` (Default)** | Local Development | Configured with fallback defaults for local MySQL (`localhost:3306`) allowing 1-click execution in IntelliJ IDEA or `./mvnw spring-boot:run` without external environment setup |
+| **`prod`** | Production Deployment | Requires explicit environment variables (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`) injected via Docker Compose or cloud platform; validates schema via Flyway |
+
+Copy `.env.example` to `.env` to configure your local environment settings.
 
 ## Getting Started
 
+### Prerequisites
+- **Java 17+**
+- **Node.js 18+** & **npm**
+- **MySQL 8** (or Docker)
+
+---
+
+### 1. Frontend Development (Hot Reload)
+For development with fast hot module replacement:
+
 ```bash
-git clone https://github.com/dennysapopescu/PopescuDennysa_WMS.git
+cd frontend
+npm install
+npm run dev
+```
+Open in browser: `http://localhost:5173`
+
+---
+
+### 2. Backend Server (Spring Boot)
+Start the Spring Boot API server on port `8080`:
+
+```bash
+# Run unit and integration tests
+./mvnw clean test
+
+# Start Spring Boot application
+./mvnw spring-boot:run
 ```
 
-1. Open in IntelliJ IDEA as a Maven project
-2. Create a MySQL database and update `application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/your_database
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
-3. Run the `@SpringBootApplication` main class
-4. Visit `http://localhost:8080`
+---
 
-## Access & Roles
+### 3. Full-Stack Run with Docker Compose (Recommended)
+Launch the MySQL 8 database container and the full-stack WMS application with a single command:
 
-To explore the application features, you can log in with the following demo accounts:
+```bash
+docker compose up --build
+```
+The application will be accessible at `http://localhost:8080` (MySQL on port `3306`).
 
-| Role | Username | Password | Access Level |
+---
+
+### 4. Local Production Build (Standalone JAR with Bundled SPA)
+Compile the React frontend into `src/main/resources/static/` and package into a single executable JAR:
+
+```bash
+# 1. Compile frontend assets
+cd frontend && npm run build && cd ..
+
+# 2. Package executable JAR
+./mvnw clean package
+
+# 3. Run standalone application
+java -jar target/wms-0.0.1-SNAPSHOT.jar
+```
+Open in browser: `http://localhost:8080`
+
+---
+
+## User Roles & Default Demo Credentials
+
+| Role | Default Username | Default Password | Permissions |
 |---|---|---|---|
-| **Admin** | `admin` | `admin123` | Full access |
-| **Operator** | `operator` | `operator123` | Inbound/Outbound/Slotting |
-| **Viewer** | `viewer` | `viewer123` | Read-only |
+| **Admin** | `admin` | `admin123` | Full access: User management, Locations CRUD, Products CRUD, Stock adjustments, Exports |
+| **Operator** | `operator` | `operator123` | Warehouse operations: Product edit & transfer, Outbound order picking & QR confirmation |
+| **Viewer** | `viewer` | `viewer123` | Read-only access: View dashboard metrics, product catalog, warehouse map, audit history |
 
-> Note: These accounts are automatically seeded in the database upon startup.
+> **Note:** Demo passwords can be customized via environment variables (`ADMIN_PASSWORD`, `OPERATOR_PASSWORD`, `VIEWER_PASSWORD`).
 
-## Roadmap
+## Testing
 
-- [ ] Mobile companion app
-- [ ] Advanced analytics dashboard
-- [ ] Physical barcode scanner integration
-- [ ] Split into microservices (inventory / auth / reporting)
+The automated test suite verifies both domain logic and API contracts:
+- **Unit Tests:** `LocationServiceTest`, `OutboundOrderServiceTest`, `ProductServiceTest`, `UserServiceTest`, `AuthServiceTest`, `DashboardServiceTest`, `QrCodeServiceTest`
+- **Integration Tests:** `ProductApiIntegrationTest`, `SpaRoutingIntegrationTest`, `CustomUserDetailsServiceTest`
+- **Smoke Tests:** `MySqlContainerSmokeTest` (automatically executed when Docker daemon is accessible)
+
+```bash
+./mvnw test
+```
 
 ## Author
 
 **Dennysa-Maria Popescu**
-
 <p align="left">
   <a href="https://www.linkedin.com/in/dennysa-popescu-4938a9263">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile" />
