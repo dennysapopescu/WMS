@@ -133,7 +133,7 @@ All business API endpoints are versioned under `/api/v1` (with authentication ro
 |---|---|---|
 | `/api/auth` | `POST /login`, `POST /logout`, `GET /me` | Authentication session & user state |
 | `/api/v1/locations` | `GET`, `POST`, `PUT`, `DELETE`, `GET /suggestions` | Storage sector management and smart slotting recommendations |
-| `/api/v1/products` | `GET`, `POST`, `PUT`, `DELETE`, `PATCH /stock`, `POST /transfer`, `POST /import` | Product inventory, stock adjustments, CSV bulk import, and PDF export |
+| `/api/v1/products` | `GET`, `POST`, `PUT`, `DELETE`, `PATCH /stock`, `POST /transfer`, `POST /import`, `GET /export/pdf` | Product inventory, stock adjustments, CSV bulk import, and PDF export |
 | `/api/v1/outbound-orders` | `GET`, `POST`, `POST /confirm-pick`, `POST /scan-confirm`, `DELETE` | Order picking workflow and QR scan confirmation |
 | `/api/v1/dashboard` | `GET` | Aggregated KPI metrics, estimated restocking timeframes, and audit logs |
 | `/api/v1/admin/users` | `GET`, `POST`, `PATCH /{id}/toggle` | Staff user account management (Admin only) |
@@ -145,7 +145,8 @@ Interactive OpenAPI documentation is accessible at `/swagger-ui/index.html` (mac
 
 - **Backend:** Java 17, Spring Boot 3.4, Spring Data JPA, Spring Security, Hibernate, Flyway
 - **Frontend (SPA):** React 18, Vite, Tailwind CSS, Lucide Icons, Chart.js, HTML5-QRCode Scanner
-- **Database:** MySQL 8 (Production & Dev) / H2 & Testcontainers (Integration Testing)
+- **Database:** MySQL 8 (Development & Production), H2 (Tests)
+- **Testing Infrastructure:** JUnit 5, Mockito, Spring Security Test, Testcontainers
 - **Libraries:** ZXing (QR code processing), iText 7 (PDF document export), OpenCSV (CSV parsing), Springdoc OpenAPI 2.8 (Swagger UI)
 - **DevOps & Tooling:** Docker, Docker Compose, Multi-stage Dockerfile, GitHub Actions CI
 
@@ -153,8 +154,9 @@ Interactive OpenAPI documentation is accessible at `/swagger-ui/index.html` (mac
 
 | Profile | Purpose | Description |
 |---|---|---|
-| **`dev` (Default)** | Local Development | Configured with fallback defaults for local MySQL (`localhost:3306`) allowing 1-click execution in IntelliJ IDEA or `./mvnw spring-boot:run` without external environment setup |
-| **`prod`** | Production Deployment | Requires explicit environment variables (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`) injected via Docker Compose or cloud platform; validates schema via Flyway |
+| **`dev` (Default)** | Local Development | Configured for local MySQL (`localhost:3306`) and convenient execution from IntelliJ IDEA or `./mvnw spring-boot:run` |
+| **`docker`** | Docker Compose | Uses MySQL from the Docker network, initializes demo data, and runs the full-stack application through Docker Compose |
+| **`prod`** | Production Deployment | Requires explicit environment variables (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`) and validates the database schema via Flyway |
 
 Copy `.env.example` to `.env` to configure your local environment settings.
 
@@ -198,7 +200,7 @@ Launch the MySQL 8 database container and the full-stack WMS application with a 
 ```bash
 docker compose up --build
 ```
-The application will be accessible at `http://localhost:8080` (MySQL on port `3306`).
+The application will be accessible at `http://localhost:8080` (MySQL exposed on host port `3307`).
 
 ---
 
@@ -219,15 +221,17 @@ Open in browser: `http://localhost:8080`
 
 ---
 
-## User Roles & Default Demo Credentials
+## User Roles & Demo Credentials
 
-| Role | Default Username | Default Password | Permissions |
+The Docker Compose setup automatically creates demo users for exploring the application:
+
+| Role | Username | Password | Permissions |
 |---|---|---|---|
 | **Admin** | `admin` | `admin123` | Full access: User management, Locations CRUD, Products CRUD, Stock adjustments, Exports |
 | **Operator** | `operator` | `operator123` | Warehouse operations: Product edit & transfer, Outbound order picking & QR confirmation |
 | **Viewer** | `viewer` | `viewer123` | Read-only access: View dashboard metrics, product catalog, warehouse map, audit history |
 
-> **Note:** Demo passwords can be customized via environment variables (`ADMIN_PASSWORD`, `OPERATOR_PASSWORD`, `VIEWER_PASSWORD`).
+> **Note:** Demo passwords can be overridden using `ADMIN_PASSWORD`, `OPERATOR_PASSWORD`, and `VIEWER_PASSWORD` environment variables.
 
 ## Testing
 
