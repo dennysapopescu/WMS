@@ -20,7 +20,7 @@ public class WmsApplication {
 	}
 
 	@Bean
-	@Profile("dev")
+	@Profile({"dev", "docker"})
 	CommandLineRunner initDatabase(
 			UserRepository userRepository,
 			PasswordEncoder passwordEncoder,

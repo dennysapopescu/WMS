@@ -33,7 +33,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: docker
       DB_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-wms_db}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       DB_USERNAME: ${DB_USERNAME:-wms_user}
       DB_PASSWORD: ${DB_PASSWORD}
