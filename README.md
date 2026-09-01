@@ -8,7 +8,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ed)
 
-A full-stack Warehouse Management System built with Java, Spring Boot, React, and MySQL. It digitizes core logistics operations — live inventory tracking, inbound/outbound flows, and storage optimization — featuring concurrency-safe stock updates, role-based access control, and an interactive digital twin warehouse map reflecting current inventory state.
+A full-stack Warehouse Management System built with Java, Spring Boot, React, and MySQL. The system models core warehouse operations including inventory management, inbound/outbound workflows, storage optimization, and order picking. It features optimistic locking for concurrency-safe stock updates, role-based access control, QR-based picking verification, reporting, and an interactive digital twin warehouse map.
 
 ## 📸 Application Preview
 
@@ -68,11 +68,7 @@ A full-stack Warehouse Management System built with Java, Spring Boot, React, an
 
 ## Why This Project
 
-Unlike typical CRUD apps that manage isolated entities with standard forms, this system models real-world operational logistics challenges:
-- **Concurrency Control:** Optimistic locking (`@Version`) protects inventory updates from conflicting concurrent modifications and lost updates when multiple operators confirm picking tasks or adjust stock simultaneously.
-- **Smart Slotting Engine:** Placement heuristics evaluate rack capacity and recommend suitable storage locations based on current occupancy.
-- **Authentication & RBAC:** Spring Security authentication (session and remember-me token) with role-based access control (Admin / Operator / Viewer) and audit traceability.
-- **Digital Twin Visualization:** Interactive 2D warehouse map reflecting current inventory and storage occupancy.
+This project goes beyond basic CRUD by modeling real-world warehouse operations and the engineering challenges involved in inventory management:
 
 ## Key Features
 
@@ -163,9 +159,14 @@ Copy `.env.example` to `.env` to configure your local environment settings.
 ## Getting Started
 
 ### Prerequisites
-- **Java 17+**
-- **Node.js 18+** & **npm**
-- **MySQL 8** (or Docker)
+
+For the recommended Docker setup:
+- **Docker Desktop** with Docker Compose
+
+For local development without Docker:
+- **Java 17**
+- **Node.js 20+** & **npm**
+- **MySQL 8**
 
 ---
 
@@ -195,12 +196,17 @@ Start the Spring Boot API server on port `8080`:
 ---
 
 ### 3. Full-Stack Run with Docker Compose (Recommended)
-Launch the MySQL 8 database container and the full-stack WMS application with a single command:
+
+The recommended way to run the complete application locally is Docker Compose. It starts the MySQL 8 database and the Spring Boot application, with the React SPA built and bundled into the backend image.
 
 ```bash
 docker compose up --build
 ```
-The application will be accessible at `http://localhost:8080` (MySQL exposed on host port `3307`).
+The application will be accessible at:
+
+- **WMS:** `http://localhost:8080`
+- **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
+- **MySQL:** `localhost:3307` from the host
 
 ---
 
